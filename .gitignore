@@ -1,0 +1,5 @@
+ASSETS
+node_modules
+.env
+/mp3
+/pictures
