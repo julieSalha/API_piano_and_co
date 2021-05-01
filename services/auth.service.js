@@ -4,6 +4,7 @@ Imports
     const JwtStrategy = require('passport-jwt').Strategy;
     const UserModel = require('../models/user.model');
     const AdminModel = require('../models/admin.model');
+    const keys = require("./keys");
 //
 
 /* 
@@ -18,12 +19,13 @@ Methods
         return token;
     }
 
+
     // JWT authentication user
     const authJwt = passport => {
         // JWT options for passport
         const opts = {
             jwtFromRequest: cookieExtractor, 
-            secretOrKey: process.env.JWT_SECRET
+            secretOrKey: keys.secretOrKey
         }
 
         // JWT strategy

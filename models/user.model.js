@@ -4,6 +4,8 @@ Import
     const mongoose = require('mongoose');
     const { Schema } = mongoose;
     const jwt = require('jsonwebtoken');
+    const keys = require("../services/keys");
+
 //
 
 /*
@@ -54,7 +56,7 @@ Methods
         }
 
         // Retunr JWT
-        return jwt.sign( jwtObject, process.env.JWT_SECRET );
+        return jwt.sign( jwtObject, keys.secretOrKey );
     }
 //
 
