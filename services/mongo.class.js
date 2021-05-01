@@ -11,7 +11,7 @@ Define class
     class MONGOClass { 
         constructor(){
             // Set MongoDB url
-            this.mongoUrl = process.env.MONGO_URL || 'mongodb://127.0.0.1:27017/api-piano';
+            this.mongoUrl = 'mongodb://127.0.0.1:27017/api-piano';
         };
 
         connectDb(){
