@@ -1,13 +1,17 @@
 {
-  "name": "brainnode",
+  "name": "pianoandco",
   "version": "1.0.0",
-  "description": "",
+  "description": "api piano and co",
+  "author": "julie s.",
+  "git repository": "https://github.com/julieSalha/API_piano_and_co",
   "main": "server.js",
+  "engines": {
+    "node": "v12.18.4"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon server.js"
   },
-  "author": "",
   "license": "ISC",
   "dependencies": {
     "axios": "^0.21.1",
