@@ -16,8 +16,8 @@ Define class
 
         connectDb(){
             return new Promise( (resolve, reject) => {
-                mongoose.connect(this.mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
-                .then( db => resolve( { db: db, url: this.mongoUrl } ))
+                mongoose.connect(this.mongoUrl || 'mongodb://127.0.0.1:27017/api-piano', { useNewUrlParser: true, useUnifiedTopology: true })
+                .then(resolve('connected to mongodb..'))
                 .catch( dbErr => reject(`MongoDB not connected`, dbErr) )
             });
         };
