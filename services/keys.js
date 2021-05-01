@@ -1,3 +1,3 @@
 module.exports = {
-    secretOrKey: 'dlsjdspkzxzmamampnbbsszIj800xjsk'
+    secretOrKey: 'dlsjdspkzssxzmamampnbbsszIj800xjsk'
 };
