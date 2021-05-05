@@ -23,8 +23,10 @@ class ServerClass{
     constructor(){
         this.server = express();
         this.port = process.env.PORT;
+        this.dbStream;
         this.MongoDB = new MONGOclass;
     }
+
 
     init(){
         // Set CORS
@@ -91,23 +93,29 @@ class ServerClass{
         const songSuggestionRouter = new SongSuggestionRouterClass( { passport } );
         this.server.use('/suggest_song', songSuggestionRouter.init());
 
+        // Streaming
+        const StreamingRouterClass = require('./routers/streaming.router');
+        const StreamingClassRouter = new StreamingRouterClass( { passport } );
+        this.server.use('/tracks', StreamingClassRouter.init());
+
         // Launch server
         this.launch();
     }
 
     launch(){
         // Start MongoDB connection
-        this.MongoDB.connectDb()
-        .then( db => {
-            // Start server
-            this.server.listen(this.port, () => {
-                console.log({
-                    node: `http://localhost:${this.port}`,
-                    mongo: db.url,
-                });
-            });
-        })
-        .catch( dbErr => console.log('MongoDB Error', dbErr));
+        // this.MongoDB.connectDb()
+        // .then( db => {
+        //     // Start server
+        //     this.server.listen(this.port, () => {
+        //         console.log({
+        //             node: `http://localhost:${this.port}`,
+        //             mongo: db.url,
+        //         });
+        //     });
+        // })
+        // .catch( dbErr => console.log('MongoDB Error', dbErr));
+        this.MongoDB.run().catch(err => console.log(err));
     }
 }
 //

@@ -7,7 +7,8 @@ Definition
         comment         : require('./comment.controller'),
         chord           : require('./chord.controller'),
         interpretation  : require('./interpretation.controller'),
-        like            : require('./like.controller')
+        like            : require('./like.controller'),
+        streaming       : require('./streaming.controller')
     }
 //
 

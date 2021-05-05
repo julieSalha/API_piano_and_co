@@ -8,7 +8,7 @@ Definition
         interpretation  : require('./interpretation.model'),
         like            : require('./like.model'),
         playlist        : require('./playlist.model'),
-        song            : require('./song.model'),
+        streaming       : require('./streaming.model'),
         user            : require('./user.model')
     } 
 //

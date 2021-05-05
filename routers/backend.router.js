@@ -25,7 +25,6 @@ Routes definition
             this.router.get('/', this.passport.authenticate('admin-rule', { session: false, failureRedirect: '/login' }), (req, res) => {
                 Controllers.admin.adminMe(req, res)
                 .then(apiResponse => {
-                    console.log('apiResponse me', apiResponse);
                     renderSuccessVue('index', '/', 'GET', res, 'Request succeed', apiResponse)
                 })
                 .catch(apiError => renderErrorVue('index', '/login', 'GET', res, 'Request failed', apiError))
