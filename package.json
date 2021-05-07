@@ -1,11 +1,17 @@
 {
-  "name": "brainnode",
+  "name": "piano",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server.js"
+    "start": "nodemon server.js",
+    "compile": "ncc build server.js -o dist",
+    "terser": "terser ./dist/index.js --compress --mangle --output ./dist/server.js",
+    "copy-env": "cp .env.prod ./dist/.env",
+    "delete-dist-file": "rm ./dist/code-points.mem && rm ./dist/index.js",
+    "push": "scp -r ./dist/ julie@134.209.84.253:/home/julie/piano/api",
+    "deploy": "npm run compile && npm run terser && npm run copy-env && npm run delete-dist-file && npm run push"
   },
   "author": "",
   "license": "ISC",
@@ -27,6 +33,7 @@
     "node-fetch": "^2.6.1",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "terser": "^5.7.0"
   }
 }
