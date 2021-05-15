@@ -14,6 +14,13 @@ Imports
 
     // Services
     const MONGOclass = require('./services/mongo.class');
+
+    // Streaming
+    const methodOverride = require('method-override');
+    const multer = require('multer');
+    const GridFsStorage = require('multer-gridfs-storage');
+    const crypto = require('crypto');
+
 //
 
 /*
@@ -51,7 +58,7 @@ class ServerClass{
         this.server.use( express.static(path.join(__dirname, 'www')) );
 
         //=> Body-parser
-        this.server.use(bodyParser.json({limit: '1000mb'}));
+        this.server.use(bodyParser.json({limit: '1000000000mb'}));
         this.server.use(bodyParser.urlencoded({ extended: true }));
 
         //=> Use CookieParser to setup serverside cookies
@@ -90,6 +97,37 @@ class ServerClass{
         const SongSuggestionRouterClass = require('./routers/suggestion_songs.router');
         const songSuggestionRouter = new SongSuggestionRouterClass( { passport } );
         this.server.use('/suggest_song', songSuggestionRouter.init());
+
+        // Streaming files router
+        const streamingFilesRouterClass = require('./routers/streaming.router');
+        const streamingFilesRouter = new streamingFilesRouterClass( { passport } );
+        this.server.use('/upload', streamingFilesRouter.init());
+
+        /* 
+        GridFs Configuration
+        */
+
+        // create storage engine
+        const storage = new GridFsStorage({
+            url: process.env.MONGO_URL,
+            file: (req, file) => {
+                return new Promise((resolve, reject) => {
+                    crypto.randomBytes(16, (err, buf) => {
+                        if (err) {
+                            return reject(err);
+                        }
+                        const filename = buf.toString('hex') + path.extname(file.originalname);
+                        const fileInfo = {
+                            filename: filename,
+                            bucketName: 'uploads'
+                        };
+                        resolve(fileInfo);
+                    });
+                });
+            }
+        });
+
+        const upload = multer({ storage });
 
         // Launch server
         this.launch();

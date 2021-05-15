@@ -12,6 +12,7 @@ Definition
         like: [ 'potentialAction' , 'subjectOf', 'author' ],
         register: [ 'givenName', 'familyName', 'gender', 'date_of_birth', 'profile_picture', 'adress', 'biography', 'password', 'email' ],
         song: [ 'title', 'artist_name', 'url_song', 'key', 'chords', 'cover', 'duration', 'url_tabs', 'artist' ],
+        streaming: [ 'title', 'artist_name', 'track', 'cover', 'duration', 'user'],
     } 
 //
 
