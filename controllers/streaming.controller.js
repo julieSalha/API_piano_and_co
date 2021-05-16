@@ -1,6 +1,7 @@
 /* 
 Imports
 */
+const { streaming } = require('../models/index');
 const Models = require('../models/index');
 //
 
@@ -9,10 +10,19 @@ CRUD methods
 */
     const createOne = req => {
         return new Promise( (resolve, reject) => {
-            // Use Models to create new streaming
-            Models.streaming.create( req.body )
-            .then( data => resolve(data) )
-            .catch( err => reject(err) )
+
+            let newStream = {
+                title: req.body.title,
+                artist_name: req.body.artist_name,
+                track: req.files['track'][0],
+                cover: req.files['cover'][0],
+                duration: req.body.duration,
+                user: req.body.author
+            }
+
+            Models.streaming.create( newStream )
+            .then( streaming => resolve(streaming))
+            .catch( err => reject(err));
         })
     }
 
@@ -39,7 +49,7 @@ CRUD methods
             })
         })
 
-        const findInerpretationComments = new Promise( (resolve, reject) => {
+        const findStreamingComments = new Promise( (resolve, reject) => {
             // Find comments streaming
             Models.comment.find( { subjectOf: id }, (err, data) => {
                 if( err || data === null ){ 
@@ -51,7 +61,7 @@ CRUD methods
             })
         });
 
-        const findInerpretationLikes = new Promise( (resolve, reject) => {
+        const findStreamingLikes = new Promise( (resolve, reject) => {
             // Find comments streaming
             Models.like.find( { subjectOf: id }, (err, data) => {
                 if( err || data === null ){ 
@@ -63,7 +73,7 @@ CRUD methods
             })
         });
 
-         const allPromises = Promise.all([ findOne, findInerpretationComments, findInerpretationLikes])
+         const allPromises = Promise.all([ findOne, findStreamingComments, findStreamingLikes])
          return allPromises;
     }
 
@@ -75,8 +85,8 @@ CRUD methods
                 // Update streaming
                 streaming.title = req.body.title;
                 streaming.artist_name = req.body.artist_name;
-                streaming.track = req.body.track;
-                streaming.cover = req.body.cover;
+                streaming.track = req.files['track'][0];
+                streaming.cover = req.files['cover'][0];
                 streaming.duration = req.body.duration;
                 streaming.user = req.body.user;
                 streaming.creationDate = new Date();
@@ -102,49 +112,6 @@ CRUD methods
             })
         });
     }
-//
-
-    // Relative comments and likes
-    // const relativeInfos = (req, res) => {
-    //     const findstreaming = new Promise( (resolve, reject) => {
-    //             // Find streaming id
-    //             Models.streaming.findById( req.user._id, (err, data) => {
-    //                 if( err || data === null ){ return reject('streaming not found') }
-    //                 else{
-    //                     // Send user data
-    //                     return resolve(data)
-    //                 }
-    //             })
-    //     });
-
-    //     const findInerpretationsComments = new Promise( (resolve, reject) => {
-    //         // Find comments streaming
-    //         Models.comment.find( { subjectOf: req.streaming._id }, (err, data) => {
-    //             if( err || data === null ){ 
-    //                 return reject('No comment for this streaming') 
-    //             }
-    //             else{
-    //                 return resolve(data)
-    //             }
-    //         })
-    //     });
-
-
-    //     const findInerpretationsLikes = new Promise( (resolve, reject) => {
-    //         // Find comments streaming
-    //         Models.like.find( { subjectOf: req.streaming._id }, (err, data) => {
-    //             if( err || data === null ){ 
-    //                 return reject('No like for this streaming') 
-    //             }
-    //             else{
-    //                 return resolve(data)
-    //             }
-    //         })
-    //     });
-
-    //     const allPromises = Promise.all([findstreaming, findInerpretationsComments, findInerpretationsLikes])
-    //     return allPromises;
-    // }
 
 /* 
 Export controller methods
