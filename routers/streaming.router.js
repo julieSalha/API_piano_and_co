@@ -44,7 +44,10 @@ Routes definition
                 if( typeof req.body === 'undefined' || req.body === null || Object.keys(req.body).length === 0 || typeof req.files === 'undefined' || req.files === null ){ 
                     return sendBodyError(`/upload`, 'POST', res, 'No data provided in the reqest body')
                 }
-                else{
+                else {
+                    // Add author _id
+                    req.body.author = req.user._id;
+
                     Controllers.streaming.createOne(req)
                     .then( apiResponse => sendApiSuccessResponse(`/upload`, 'POST', res, 'Request succeed', apiResponse) )
                     .catch( apiError => sendApiErrorResponse(`/upload`, 'POST', res, 'Request failed', apiError) );

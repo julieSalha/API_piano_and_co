@@ -62,9 +62,9 @@ Controller methods
 
         const findUserInerpretations = new Promise( (resolve, reject) => {
             // Find user interpretation(s)
-            Models.interpretation.find( { user: req.user._id }, (err, data) => {
+            Models.streaming.find( { user: req.user._id }, (err, data) => {
                 if( err || data === null ){ 
-                    return reject('No interpretations for this user') 
+                    return reject('No streamings for this user') 
                 }
                 else{
                     return resolve(data)
