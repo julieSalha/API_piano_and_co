@@ -14,7 +14,7 @@ CRUD methods
             // Write files cover and track
             let uploadTrack = req.files['track'][0];
             let formatTrack = uploadTrack.originalname.split('.')[1];
-            let pathTrack = uploadTrack.fieldname + '-' + Date.now() + '.' + uploadTrack.originalname.split('.')[0] + '.' + formatTrack;
+            let pathTrack = uploadTrack.fieldname + '-' + uploadTrack.originalname.split('.')[0] + '.' + formatTrack;
 
             fs.writeFile('./uploads/' + pathTrack, uploadTrack.buffer, function(err) {
                 if (err) {
@@ -25,7 +25,7 @@ CRUD methods
             let uploadCover = req.files['cover'][0];
             console.log(uploadCover)
             let formatCover = uploadCover.originalname.split('.')[1];
-            let pathCover = uploadCover.fieldname + '-' + Date.now() + '.' + uploadTrack.originalname.split('.')[0] + '.' + formatCover;
+            let pathCover = uploadCover.fieldname + '-' + uploadTrack.originalname.split('.')[0] + '.' + formatCover;
 
             fs.writeFile('./uploads/' + pathCover, uploadCover.buffer, function(err) {
                 if (err) {
