@@ -16,8 +16,8 @@ Definition
 
         title:{ type: String, required:true },
         artist_name:{ type: String, required:true },
-        track:{ type: Object, required:true },
-        cover:{ type: Object, required:true },
+        track:{ type: String, required:true },
+        cover:{ type: String, required:true },
         duration:{ type: String, required:true },
 
         // Associer le profil artist

@@ -1,8 +1,8 @@
 /* 
 Imports
 */
-const { streaming } = require('../models/index');
 const Models = require('../models/index');
+const fs = require('fs');
 //
 
 /* 
@@ -10,12 +10,34 @@ CRUD methods
 */
     const createOne = req => {
         return new Promise( (resolve, reject) => {
+            
+            // Write files cover and track
+            let uploadTrack = req.files['track'][0];
+            let formatTrack = uploadTrack.originalname.split('.')[1];
+            let pathTrack = uploadTrack.fieldname + '-' + Date.now() + '.' + uploadTrack.originalname.split('.')[0] + '.' + formatTrack;
+
+            fs.writeFile('./uploads/' + pathTrack, uploadTrack.buffer, function(err) {
+                if (err) {
+                    console.log('error', err);
+                }
+            });
+
+            let uploadCover = req.files['cover'][0];
+            console.log(uploadCover)
+            let formatCover = uploadCover.originalname.split('.')[1];
+            let pathCover = uploadCover.fieldname + '-' + Date.now() + '.' + uploadTrack.originalname.split('.')[0] + '.' + formatCover;
+
+            fs.writeFile('./uploads/' + pathCover, uploadCover.buffer, function(err) {
+                if (err) {
+                    console.log('error', err);
+                }
+            });
 
             let newStream = {
                 title: req.body.title,
                 artist_name: req.body.artist_name,
-                track: req.files['track'][0],
-                cover: req.files['cover'][0],
+                track: './uploads/' + pathTrack,
+                cover: './uploads/' + pathCover,
                 duration: req.body.duration,
                 user: req.body.author
             }

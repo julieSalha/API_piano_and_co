@@ -30,9 +30,21 @@ Routes definition
                     bucketName: 'uploads'
                 });
             });
-            //this.storage = multer.memoryStorage()
+            // this.storage = multer.diskStorage({
+            //     destination: function(req, file, cb) {
+            //         cb(null, './uploads')
+            //     },
+            //     filename: function(req, file, cb) {
+            //         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
+            //         cb(null, file.fieldname + '-' + uniqueSuffix)
+            //     }
+            // },{
 
-            this.upload = multer({ dest:'./uploads'});
+            // })
+
+            this.storage = multer.memoryStorage();
+
+            this.upload = multer({ storage: this.storage, dest: './uploads' });
             this.allUpload = this.upload.fields([{name: 'track', maxCount: 1}, {name: 'cover', maxCount: 1}])
         }
 
@@ -45,10 +57,7 @@ Routes definition
                     return sendBodyError(`/upload`, 'POST', res, 'No data provided in the reqest body')
                 }
                 else {
-                    // Add author _id
-                    req.body.author = req.user._id;
-
-                    Controllers.streaming.createOne(req)
+                    Controllers.streaming.createOne(req, this.gfs)
                     .then( apiResponse => sendApiSuccessResponse(`/upload`, 'POST', res, 'Request succeed', apiResponse) )
                     .catch( apiError => sendApiErrorResponse(`/upload`, 'POST', res, 'Request failed', apiError) );
                 }
