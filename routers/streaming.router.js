@@ -57,6 +57,9 @@ Routes definition
                     return sendBodyError(`/upload`, 'POST', res, 'No data provided in the reqest body')
                 }
                 else {
+                    // Add author _id
+                    req.body.author = req.user._id;
+                    
                     Controllers.streaming.createOne(req, this.gfs)
                     .then( apiResponse => sendApiSuccessResponse(`/upload`, 'POST', res, 'Request succeed', apiResponse) )
                     .catch( apiError => sendApiErrorResponse(`/upload`, 'POST', res, 'Request failed', apiError) );

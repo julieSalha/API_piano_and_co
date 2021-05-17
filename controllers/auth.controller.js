@@ -60,7 +60,7 @@ Controller methods
                 })
         });
 
-        const findUserInerpretations = new Promise( (resolve, reject) => {
+        const findUserStreamings = new Promise( (resolve, reject) => {
             // Find user interpretation(s)
             Models.streaming.find( { user: req.user._id }, (err, data) => {
                 if( err || data === null ){ 
@@ -72,7 +72,7 @@ Controller methods
             })
         });
 
-        const allPromises = Promise.all([findUser, findUserInerpretations])
+        const allPromises = Promise.all([findUser, findUserStreamings])
         return allPromises;
     }
 
