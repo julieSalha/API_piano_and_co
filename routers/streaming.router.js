@@ -22,7 +22,6 @@ Routes definition
         constructor( { passport } ){
             this.router = express.Router(); 
             this.passport = passport
-
             this.connect = mongoose.createConnection(process.env.MONGO_URL, { useNewUrlParser: true, useUnifiedTopology: true });
             this.gfs;
             this.connect.once('open', () => {
@@ -30,20 +29,7 @@ Routes definition
                     bucketName: 'uploads'
                 });
             });
-            // this.storage = multer.diskStorage({
-            //     destination: function(req, file, cb) {
-            //         cb(null, './uploads')
-            //     },
-            //     filename: function(req, file, cb) {
-            //         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
-            //         cb(null, file.fieldname + '-' + uniqueSuffix)
-            //     }
-            // },{
-
-            // })
-
             this.storage = multer.memoryStorage();
-
             this.upload = multer({ storage: this.storage, dest: './uploads' });
             this.allUpload = this.upload.fields([{name: 'track', maxCount: 1}, {name: 'cover', maxCount: 1}])
         }
@@ -70,6 +56,32 @@ Routes definition
             this.router.get('/', (req, res) => {
                 // Use the controller to get data
                 Controllers.streaming.readAll()
+                .then( apiResponse => {
+                    sendApiSuccessResponse(`/upload`, 'GET', res, 'Request succeed', apiResponse)
+
+                })
+                .catch( apiError => {
+                    sendApiErrorResponse(`/upload`, 'GET', res, 'Request failed', apiError)
+                } );
+            })
+
+            // // CRUD: define route to read random selection
+            this.router.get('/random', (req, res) => {
+                // Use the controller to get data
+                Controllers.streaming.randomSelection()
+                .then( apiResponse => {
+                    sendApiSuccessResponse(`/upload`, 'GET', res, 'Request succeed', apiResponse)
+
+                })
+                .catch( apiError => {
+                    sendApiErrorResponse(`/upload`, 'GET', res, 'Request failed', apiError)
+                } );
+            })
+
+            // // CRUD: define route to read last streamings added
+            this.router.get('/last', (req, res) => {
+                // Use the controller to get data
+                Controllers.streaming.LastStreamings()
                 .then( apiResponse => {
                     sendApiSuccessResponse(`/upload`, 'GET', res, 'Request succeed', apiResponse)
 

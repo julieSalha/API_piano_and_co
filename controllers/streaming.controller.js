@@ -135,6 +135,28 @@ CRUD methods
         });
     }
 
+    const randomSelection = req => {
+        return new Promise( (resolve, reject) => {
+             // Random selection
+             Models.streaming.aggregate[{$sample: { size: 1}}]
+        });
+    }
+
+    const LastStreamings = req => {
+        return new Promise( (resolve, reject) => {
+             // Random selection
+             Models.streaming.find().sort({ $natural: -1}).limit(10)
+             .then( async data => {
+                 let collection = [];
+                 for( let item of data ){
+                     collection.push( await readOne(item._id) )
+                 }
+                 return resolve(collection);
+             })
+             .catch( err => reject(err) )
+        });
+    }
+
 /* 
 Export controller methods
 */
@@ -143,6 +165,8 @@ Export controller methods
         readOne,
         createOne,
         updateOne,
-        deleteOne
+        deleteOne,
+        randomSelection,
+        LastStreamings
     }
 //
