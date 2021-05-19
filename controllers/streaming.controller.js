@@ -14,7 +14,7 @@ CRUD methods
             // Write files cover and track
             let uploadTrack = req.files['track'][0];
             let formatTrack = uploadTrack.originalname.split('.')[1];
-            let pathTrack = uploadTrack.fieldname + '-' + uploadTrack.originalname.split('.')[0] + '.' + formatTrack;
+            let pathTrack = uploadTrack.fieldname + '-' + Date.now() + '-' + uploadTrack.originalname.split('.')[0] + '.' + formatTrack;
 
             fs.writeFile('./uploads/' + pathTrack, uploadTrack.buffer, function(err) {
                 if (err) {
@@ -25,7 +25,7 @@ CRUD methods
             let uploadCover = req.files['cover'][0];
             console.log(uploadCover)
             let formatCover = uploadCover.originalname.split('.')[1];
-            let pathCover = uploadCover.fieldname + '-' + uploadTrack.originalname.split('.')[0] + '.' + formatCover;
+            let pathCover = uploadCover.fieldname + '-' + Date.now() + '-' + uploadTrack.originalname.split('.')[0] + '.' + formatCover;
 
             fs.writeFile('./uploads/' + pathCover, uploadCover.buffer, function(err) {
                 if (err) {
@@ -100,15 +100,40 @@ CRUD methods
     }
 
     const updateOne = req => {
+        console.log('updateOne', req.body)
         return new Promise( (resolve, reject) => {
+            // Write files cover and track
+            let uploadTrack = req.files['track'][0];
+            let formatTrack = uploadTrack.originalname.split('.')[1];
+            let pathTrack = uploadTrack.fieldname + '-' + Date.now() + '-' + uploadTrack.originalname.split('.')[0] + '.' + formatTrack;
+
+            fs.writeFile('./uploads/' + pathTrack, uploadTrack.buffer, function(err) {
+                if (err) {
+                    console.log('error', err);
+                }
+            });
+
+            let uploadCover = req.files['cover'][0];
+            console.log(uploadCover)
+            let formatCover = uploadCover.originalname.split('.')[1];
+            let pathCover = uploadCover.fieldname + '-' + Date.now() + '-' + uploadTrack.originalname.split('.')[0] + '.' + formatCover;
+
+            fs.writeFile('./uploads/' + pathCover, uploadCover.buffer, function(err) {
+                if (err) {
+                    console.log('error', err);
+                }
+            });
+
+            // TODO: delete latest ?
+
             // Get post by ID
             Models.streaming.findById( req.params.id )
             .then( streaming => {
                 // Update streaming
                 streaming.title = req.body.title;
                 streaming.artist_name = req.body.artist_name;
-                streaming.track = req.files['track'][0];
-                streaming.cover = req.files['cover'][0];
+                streaming.track = './uploads/' + pathTrack;
+                streaming.cover = './uploads/' + pathCover;
                 streaming.duration = req.body.duration;
                 streaming.user = req.body.user;
                 streaming.creationDate = new Date();
@@ -116,6 +141,7 @@ CRUD methods
                 streaming.isPublished = req.body.isPublished;
                 streaming.timestamps = req.body.timestamps;
 
+                console.log('streaming', streaming);
                 // Save post changes
                 streaming.save()
                 .then( updatedstreaming => resolve(updatedstreaming) )
