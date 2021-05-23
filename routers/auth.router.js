@@ -76,6 +76,11 @@ Routes definition
                 .catch(apiError => sendApiSuccessResponse('/auth/login', 'POST', res, 'Request error', apiError))
             });
 
+            // AUTH: logout
+            this.router.get('/logout', this.passport.authenticate('user-rule', { session: false }), (req, res) => {
+                Controllers.auth.logout(req, res)
+            });
+
             // TODO: create route to reset password
 
             // TODO: create delete account and to get all user data (RGPD)
