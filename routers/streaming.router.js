@@ -118,6 +118,7 @@ Routes definition
             // CRUD: define route to delete one object
             this.router.delete('/:id', this.passport.authenticate('user-rule', { session: false }), (req, res) => {
                 // Use the controller to delete data
+                //console.log('req delete', req)
                 Controllers.streaming.deleteOne(req)
                 .then( apiResponse => sendApiSuccessResponse(`/upload/${req.params.id}`, 'DELETE', res, 'Request succeed', apiResponse) )
                 .catch( apiError => sendApiErrorResponse(`/upload/${req.params.id}`, 'DELETE', res, 'Request failed', apiError) );

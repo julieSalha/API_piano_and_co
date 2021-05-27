@@ -154,6 +154,7 @@ CRUD methods
     const deleteOne = req => {
         return new Promise( (resolve, reject) => {
              // Delete object
+             console.log('deleteOne', req.params.id)
              Models.streaming.findByIdAndDelete( req.params.id, (err, deleted) => {
                 if( err ){ return reject(err) }
                 else{ return resolve(deleted) };

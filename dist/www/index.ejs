@@ -1,0 +1,71 @@
+<!-- Importer le header en EJS -->
+<%- include('statics/header') -%>
+
+<main>
+    <h2>Admin space Piano & Co.</h2>
+    <p>Welcome <%= data[0].givenName %> :-)</p>
+
+    <h3>Interpretations list</h3>
+    <ul class="list-interpretations">
+        <% for(var i = 0; i < data[1].length; i++) {%>
+            <li>
+                <div class="block-title">
+                    <div>
+                        title: <span class="title-track"> <%= data[1][i][0].title %></span>  - artist:<span  class="artist-track"><%= data[1][i][0].artist_name %></span> 
+                    </div>   
+                    <button class="like-button" onclick="toggleLike(event, '<%=data[1][i][0]._id %>')">Like track</button>
+                </div>
+                <p>
+                    <audio autoplay="autoplay"controls="controls">
+                        <source src="<%= data[1][i][0].track %>"/>
+                      </audio>
+                </p>
+                <p>Counter likes: <%= data[1][i][2].length %></p>
+                <p>Comments: </p>
+                <ul class="list-comments">
+                    <% for(var j = 0; j < data[1][i][1].length; j++) {%>
+                        <li>
+                            <%= data[1][i][1][j].content %>
+                            <div>
+                                <button onclick="deleteComment('<%=data[1][i][1][j]._id %>')">Delete</button>
+                                <button class="like-comment" onclick="toggleLike(event, '<%=data[1][i][1][j]._id %>')">Like</button>
+                            </div>
+                        </li>
+                    <% } %>
+                    <div>
+                        <form action="/comment" method="POST" class="form-comment" data-track="<%=data[1][i][0]._id %>">
+                            <label for="input-comment-<%=data[1][i][0]._id %>">Add comment (Press enter):</label>
+                            <input onkeyup="postComment(this.value)" data-track="<%=data[1][i][0]._id %>" name="input-comment-<%=data[1][i][0]._id %>" id="input-comment-<%=data[1][i][0]._id %>" value="" placeholder="Your comment" autocomplete="off">
+                        </form>
+                    </div>
+                </ul>
+            </li>
+        <% } %>
+    </ul>
+
+
+</main>
+
+<script src="./js/fetch-class.js"></script>
+<script src="./js/app.js"></script>
+
+<script>  
+const idUser = '<%= data[0]._id %>';
+const formsComment = Array.from(document.querySelectorAll('.form-comment'));
+
+for(let form of formsComment) {
+
+    form.addEventListener('submit', function(e){
+        e.preventDefault();
+    })
+}
+
+function postComment(content){
+    // Press enter
+    if (event.keyCode === 13) {
+        this.idComment = event.target.getAttribute('data-track');
+        event.preventDefault();
+        createComment(this.idComment, content);
+  }
+}
+</script>
